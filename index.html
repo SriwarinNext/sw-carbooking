@@ -418,6 +418,12 @@
         // 4. Navigation & UI Formats
         // ==========================================
         function navigate(viewId) {
+            // ถ้ายูสเซอร์พยายามเข้าหน้า admin แต่ยังไม่ได้ล็อกอิน ให้เด้ง Popup ถามรหัส และ "หยุด" การทำงาน (ไม่เปลี่ยนหน้า)
+            if (viewId === 'admin' && !isAdmin) {
+                promptAdminLogin();
+                return;
+            }
+
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${viewId}`).classList.remove('hidden');
             
@@ -426,11 +432,6 @@
             } else if (viewId === 'history') {
                 renderHistory();
             } else if (viewId === 'admin') {
-                if(!isAdmin) {
-                    navigate('home');
-                    promptAdminLogin();
-                    return;
-                }
                 renderAdminRequests();
                 renderAdminCars();
                 renderAdminDrivers();
@@ -456,9 +457,9 @@
             if(!calendarEl) return;
 
             const events = bookings.map(b => {
-                let color = '#f97316'; // Orange
-                if (b.status === 'approved') color = '#22c55e'; // Green
-                if (b.status === 'rejected') color = '#ef4444'; // Red
+                let color = '#f97316'; // Orange (รออนุมัติ)
+                if (b.status === 'approved') color = '#22c55e'; // Green (อนุมัติแล้ว)
+                if (b.status === 'rejected') color = '#ef4444'; // Red (ไม่อนุมัติ)
 
                 return {
                     id: b.id,
@@ -467,6 +468,8 @@
                     end: b.end,
                     backgroundColor: color,
                     borderColor: color,
+                    textColor: '#ffffff', // ให้ตัวอักษรเป็นสีขาวเพื่อให้ตัดกับพื้นหลัง
+                    display: 'block',     // บังคับให้แสดงสีพื้นหลังแบบเต็ม Block คลุมข้อความ
                     extendedProps: { ...b }
                 };
             });
