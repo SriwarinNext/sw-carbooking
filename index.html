@@ -456,23 +456,25 @@
             const calendarEl = document.getElementById('calendar');
             if(!calendarEl) return;
 
-            const events = bookings.map(b => {
-                let color = '#f97316'; // Orange (รออนุมัติ)
-                if (b.status === 'approved') color = '#22c55e'; // Green (อนุมัติแล้ว)
-                if (b.status === 'rejected') color = '#ef4444'; // Red (ไม่อนุมัติ)
+            // กรองรายการที่ 'ไม่อนุมัติ' (rejected) ออกก่อนนำไปแสดงในปฏิทิน
+            const events = bookings
+                .filter(b => b.status !== 'rejected')
+                .map(b => {
+                    let color = '#f97316'; // Orange (รออนุมัติ)
+                    if (b.status === 'approved') color = '#22c55e'; // Green (อนุมัติแล้ว)
 
-                return {
-                    id: b.id,
-                    title: `${b.name} (${b.place})`,
-                    start: b.start,
-                    end: b.end,
-                    backgroundColor: color,
-                    borderColor: color,
-                    textColor: '#ffffff', // ให้ตัวอักษรเป็นสีขาวเพื่อให้ตัดกับพื้นหลัง
-                    display: 'block',     // บังคับให้แสดงสีพื้นหลังแบบเต็ม Block คลุมข้อความ
-                    extendedProps: { ...b }
-                };
-            });
+                    return {
+                        id: b.id,
+                        title: `${b.name} (${b.place})`,
+                        start: b.start,
+                        end: b.end,
+                        backgroundColor: color,
+                        borderColor: color,
+                        textColor: '#ffffff', // ให้ตัวอักษรเป็นสีขาวเพื่อให้ตัดกับพื้นหลัง
+                        display: 'block',     // บังคับให้แสดงสีพื้นหลังแบบเต็ม Block คลุมข้อความ
+                        extendedProps: { ...b }
+                    };
+                });
 
             if (calendarInstance) {
                 calendarInstance.destroy();
