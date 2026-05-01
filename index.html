@@ -479,7 +479,7 @@
             }
 
             calendarInstance = new FullCalendar.Calendar(calendarEl, {
-                initialView: window.innerWidth < 768 ? 'listWeek' : 'dayGridMonth',
+                initialView: 'dayGridMonth', // เปลี่ยนให้แสดงผลแบบปฏิทินเดือน (Month View) เสมอไม่ว่าจะบน PC หรือมือถือ
                 headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,listWeek' },
                 locale: 'th',
                 events: events,
