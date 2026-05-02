@@ -49,6 +49,14 @@
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Calendar Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .fc-toolbar { flex-direction: column; gap: 10px; }
+            .fc-toolbar-chunk { display: flex; justify-content: center; flex-wrap: wrap; gap: 5px; }
+            .fc-toolbar-title { font-size: 1.1rem !important; }
+            .fc-button { padding: 0.2rem 0.5rem !important; font-size: 0.85rem !important; }
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -95,6 +103,7 @@
                 <div class="border-t border-gray-200 my-2"></div>
                 <button id="mobileAdminLoginBtn" onclick="promptAdminLogin(); document.getElementById('mobileMenu').classList.add('hidden')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-gray-100"><i class="fa-solid fa-lock w-6"></i> เข้าสู่ระบบผู้ดูแล</button>
                 <button id="mobileAdminPanelBtn" onclick="navigate('admin'); document.getElementById('mobileMenu').classList.add('hidden')" class="hidden block w-full text-left px-3 py-2 rounded-md text-base font-medium text-yellow-600 hover:bg-yellow-50"><i class="fa-solid fa-user-shield w-6"></i> จัดการระบบ</button>
+                <button id="mobileAdminLogoutBtn" onclick="adminLogout(); document.getElementById('mobileMenu').classList.add('hidden')" class="hidden block w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50"><i class="fa-solid fa-sign-out-alt w-6"></i> ออกจากระบบ</button>
             </div>
         </div>
     </nav>
@@ -103,7 +112,7 @@
     <div id="announcementBar" class="bg-blue-50 border-b border-blue-100 text-blue-800 text-sm py-2 px-4 shadow-sm">
         <div class="max-w-7xl mx-auto flex items-center">
             <i class="fa-solid fa-bullhorn mr-3 flex-shrink-0 text-blue-500"></i>
-            <marquee id="announcementText" class="font-medium" scrollamount="4">
+            <marquee id="announcementText" class="font-medium w-full" scrollamount="4">
                 กำลังโหลดประกาศ...
             </marquee>
         </div>
@@ -486,7 +495,7 @@
                 locale: 'th',
                 events: events,
                 height: 'auto',
-                eventClick: function(info) { showBookingDetails(info.event.extendedProps); }
+                eventClick: function(info) { showBookingDetails(info.event.id); }
             });
             calendarInstance.render();
         }
@@ -730,6 +739,7 @@
             const btnLogout = document.getElementById('adminLogoutBtn');
             const mobileBtnLogin = document.getElementById('mobileAdminLoginBtn');
             const mobileBtnPanel = document.getElementById('mobileAdminPanelBtn');
+            const mobileBtnLogout = document.getElementById('mobileAdminLogoutBtn');
             const footerAdminBtn = document.getElementById('footerAdminBtn');
 
             if (isAdmin) {
@@ -738,6 +748,7 @@
                 btnLogout.classList.remove('hidden');
                 mobileBtnLogin.classList.add('hidden');
                 mobileBtnPanel.classList.remove('hidden');
+                if (mobileBtnLogout) mobileBtnLogout.classList.remove('hidden');
                 if (footerAdminBtn) footerAdminBtn.classList.add('hidden');
             } else {
                 btnLogin.classList.remove('hidden');
@@ -745,6 +756,7 @@
                 btnLogout.classList.add('hidden');
                 mobileBtnLogin.classList.remove('hidden');
                 mobileBtnPanel.classList.add('hidden');
+                if (mobileBtnLogout) mobileBtnLogout.classList.add('hidden');
                 if (footerAdminBtn) footerAdminBtn.classList.remove('hidden');
             }
         }
